@@ -1,8 +1,8 @@
 package com.example.data.di
 
-import com.example.data.dataSource.SportsTable
-import com.example.data.repository.SportsRepository
+import com.example.data.dataSource.SportsDataSource
 import com.example.data.repository.SportsRepositoryImpl
+import com.example.domain.repository.SportsRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,9 +15,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideHomeRepository(
-        dataSource: SportsTable
-    ): SportsRepository = SportsRepositoryImpl(
-        dataSource
-    )
+    fun provideSportsRepository(
+        dataSource: SportsDataSource
+    ): SportsRepository = SportsRepositoryImpl(dataSource)
 }

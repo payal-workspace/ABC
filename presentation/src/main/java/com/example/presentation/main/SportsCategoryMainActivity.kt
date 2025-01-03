@@ -3,7 +3,6 @@ package com.example.presentation.main
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -121,14 +120,20 @@ class SportsCategoryMainActivity : BaseActivity<SportsCategoryViewModel, Activit
 
     private suspend fun observeSportsCategoryLists() {
         viewModel.sportsCategoriesLists.collectLatest { items ->
-            sportsCategoryItemAdapter.submitList(items)
-            binding.sportsCategoryList.scrollToPosition(0)
+            if (items.isNotEmpty()) {
+                showLoadingIndicator(false)
+                sportsCategoryItemAdapter.submitList(items)
+                binding.sportsCategoryList.scrollToPosition(0)
+            } else {
+                showLoadingIndicator(true)
+            }
+
         }
     }
 
     private suspend fun observeLoadingState() {
         viewModel.loading.collectLatest { isLoading ->
-            binding.progressBar.isVisible = isLoading
+            showLoadingIndicator(isLoading)
         }
     }
 

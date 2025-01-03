@@ -1,9 +1,8 @@
-package com.example.data.di
+package com.example.domain.di
 
 import com.example.core.common.di.IoDispatcher
-import com.example.data.mapper.CategoriesDomainDataMapper
-import com.example.data.repository.SportsRepository
-import com.example.data.usecase.GetSportsCategoriesUseCaseImp
+import com.example.domain.mapper.CategoriesDomainDataMapper
+import com.example.domain.repository.SportsRepository
 import com.example.domain.usecase.GetSportsCategoriesUseCase
 import dagger.Module
 import dagger.Provides
@@ -22,7 +21,7 @@ object UseCaseModule {
         sportsRepository: SportsRepository,
         categoriesToDomainDataMapper: CategoriesDomainDataMapper,
         @IoDispatcher dispatcher: CoroutineDispatcher
-    ): GetSportsCategoriesUseCase = GetSportsCategoriesUseCaseImp(
+    ) = GetSportsCategoriesUseCase(
         sportsRepository,
         categoriesToDomainDataMapper,
         dispatcher

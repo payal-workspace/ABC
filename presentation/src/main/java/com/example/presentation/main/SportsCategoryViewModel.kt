@@ -8,6 +8,7 @@ import com.example.domain.model.SportsModelLists
 import com.example.domain.usecase.GetSportsCategoriesUseCase
 import com.example.presentation.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -22,8 +23,8 @@ class SportsCategoryViewModel @Inject constructor(
     private val getSportsCategoriesUseCase: GetSportsCategoriesUseCase
 ) : BaseViewModel() {
 
-    private val _sportsCategories = MutableStateFlow<Resource<SportsModel>?>(null)
-    val sportsCategories: StateFlow<Resource<SportsModel>?> = _sportsCategories
+    private val _sportsCategories = MutableStateFlow<Resource<SportsModel?>?>(null)
+    val sportsCategories: StateFlow<Resource<SportsModel?>?> = _sportsCategories
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -50,7 +51,7 @@ class SportsCategoryViewModel @Inject constructor(
             _sportsCategories.emit(resource)
             try {
                 if (resource is Resource.Success) {
-                    val categories = resource.data.data.orEmpty()
+                    val categories = resource.data?.data.orEmpty()
                     _filteredCategories.emit(categories)
                     updateCategoryItems(0)
                 } else if (resource is Resource.Failure) {
@@ -67,8 +68,12 @@ class SportsCategoryViewModel @Inject constructor(
 
 
     fun updateCategoryItems(pageIndex: Int) {
-        _sportsCategoriesLists.value =_filteredCategories.value.getOrNull(pageIndex)?.sportsCategoryItem.orEmpty()
-        clearSearchQuery()
+        viewModelScope.launch {
+            _sportsCategoriesLists.value =
+                _filteredCategories.value.getOrNull(pageIndex)?.sportsCategoryItem.orEmpty()
+            clearSearchQuery()
+        }
+
     }
 
     private fun clearSearchQuery() {
@@ -77,13 +82,16 @@ class SportsCategoryViewModel @Inject constructor(
 
     fun onSearchQueryChanged(query: String, pageIndex: Int) {
         _searchQuery.value = query
-        val items = _filteredCategories.value.getOrNull(pageIndex)?.sportsCategoryItem.orEmpty()
-        _sportsCategoriesLists.value = if (query.isBlank()) {
-            items
-        } else {
-            items.filter { it.sportsTitle.contains(query, ignoreCase = true) }
+        viewModelScope.launch {
+            delay(300)
+            val items = _filteredCategories.value.getOrNull(pageIndex)?.sportsCategoryItem.orEmpty()
+            _sportsCategoriesLists.value = if (query.isBlank()) {
+                items
+            } else {
+                items.filter { it.sportsTitle.contains(query, ignoreCase = true) }
+            }
+            calculateTopCharacters()
         }
-        calculateTopCharacters()
     }
 
     fun showBottomSheet() = viewModelScope.launch {

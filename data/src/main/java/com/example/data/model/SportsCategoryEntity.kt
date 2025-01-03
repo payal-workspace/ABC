@@ -1,17 +1,15 @@
 package com.example.data.model
 
 import androidx.annotation.DrawableRes
-import com.example.core.common.model.CategoriesEntity
 
 data class SportsCategoryEntity(
     val data : List<SportsCategoryData>)
-    : CategoriesEntity
 
 data class SportsCategoryData(
     val sportsCategoryTitle:String,
     @DrawableRes
     val sportsCategoryImageUrl:Int,
-    val sportsCategoryItem: List<SportsCategoryLists>?): CategoriesEntity
+    val sportsCategoryItem: List<SportsCategoryLists>?)
 
 
 data class SportsCategoryLists(
@@ -19,4 +17,4 @@ data class SportsCategoryLists(
     val sportsDescription: String,
     @DrawableRes
     val sportsImageUrl:Int,
-): CategoriesEntity
+)

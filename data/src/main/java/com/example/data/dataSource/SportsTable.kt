@@ -14,7 +14,7 @@ sealed class SportsCategory(val name: String, val iconResId: Int) {
     object Racing : SportsCategory("Racing Sports", R.drawable.ic_racing_sport)
 }
 
-class SportsTable {
+class SportsTable : SportsDataSource {
     private val sportsListsData = SportsCategoryEntity(
         data = listOf(
             createCategory(
@@ -340,10 +340,6 @@ class SportsTable {
     )
 
 
-    suspend fun getSportsCategoryData(): SportsCategoryEntity {
-        return sportsListsData
-    }
-
     private fun createCategory(
         category: SportsCategory,
         items: List<SportsCategoryLists>
@@ -359,6 +355,10 @@ class SportsTable {
                 )
             }
         )
+    }
+
+    override suspend fun fetchSportsCategories(): SportsCategoryEntity {
+        return sportsListsData
     }
 
 
