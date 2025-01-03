@@ -19,7 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.core.common.utils.Resource
+import com.example.common.utils.Resource
 import com.example.presentation.main.ui.components.EmptyStateView
 import com.example.presentation.main.ui.components.ErrorView
 import com.example.presentation.main.ui.components.FloatingButton

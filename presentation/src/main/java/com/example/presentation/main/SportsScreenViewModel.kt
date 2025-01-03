@@ -1,7 +1,7 @@
 package com.example.presentation.main
 
 import androidx.lifecycle.viewModelScope
-import com.example.core.common.utils.Resource
+import com.example.common.utils.Resource
 import com.example.domain.model.SportsModel
 import com.example.domain.model.SportsModelData
 import com.example.domain.model.SportsModelLists
@@ -19,8 +19,8 @@ class SportsScreenViewModel @Inject constructor(
     private val getSportsCategoriesUseCase: GetSportsCategoriesUseCase
 ) : BaseViewModel() {
 
-    private val _sportsCategories = MutableStateFlow<Resource<SportsModel>>(Resource.Loading)
-    val sportsCategories: StateFlow<Resource<SportsModel>> = _sportsCategories
+    private val _sportsCategories = MutableStateFlow<Resource<SportsModel?>>(Resource.Loading)
+    val sportsCategories: StateFlow<Resource<SportsModel?>> = _sportsCategories
 
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
@@ -47,7 +47,7 @@ class SportsScreenViewModel @Inject constructor(
             val resource = getSportsCategoriesUseCase().first()
             _sportsCategories.emit(resource)
             if (resource is Resource.Success) {
-                _filteredCategories.emit(resource.data.data.orEmpty())
+                _filteredCategories.emit(resource.data?.data.orEmpty())
             } else if (resource is Resource.Failure) {
                 setError(resource.error)
             }

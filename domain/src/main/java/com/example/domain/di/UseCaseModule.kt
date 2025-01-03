@@ -1,9 +1,8 @@
-package com.example.data.di
+package com.example.domain.di
 
-import com.example.core.common.di.IoDispatcher
-import com.example.data.mapper.CategoriesDomainDataMapper
-import com.example.data.repository.GameRepository
-import com.example.data.usecase.GetSportsCategoriesUseCaseImp
+import com.example.common.di.IoDispatcher
+import com.example.domain.mapper.CategoriesDomainDataMapper
+import com.example.domain.repository.SportsRepository
 import com.example.domain.usecase.GetSportsCategoriesUseCase
 import dagger.Module
 import dagger.Provides
@@ -19,11 +18,11 @@ object UseCaseModule {
     @Singleton
     @Provides
     fun provideHomeUseCase(
-        gameRepository: GameRepository,
+        sportsRepository: SportsRepository,
         categoriesToDomainDataMapper: CategoriesDomainDataMapper,
         @IoDispatcher dispatcher: CoroutineDispatcher
-    ): GetSportsCategoriesUseCase = GetSportsCategoriesUseCaseImp(
-        gameRepository,
+    ) = GetSportsCategoriesUseCase(
+        sportsRepository,
         categoriesToDomainDataMapper,
         dispatcher
     )

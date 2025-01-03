@@ -38,7 +38,7 @@ android {
 }
 
 dependencies {
-    api(project(":core"))
+    api(project(":common"))
     api(project(":presentation"))
     api(project(":data"))
     api(project(":domain"))
